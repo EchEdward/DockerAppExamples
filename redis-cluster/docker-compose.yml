@@ -1,0 +1,110 @@
+version: '3.5'
+
+services:
+  redis_node1:
+    image: redis:alpine
+    container_name: redis_node1
+    restart: unless-stopped
+    ports:
+      - 17000:6379
+    networks:
+      redis_cluster_nework:
+        ipv4_address: 173.19.0.10
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf:rw
+      - redis-data1:/data
+    command:
+      /bin/sh -c "redis-server /usr/local/etc/redis/redis.conf "
+  redis_node2:
+    image: redis:alpine
+    container_name: redis_node2
+    restart: unless-stopped
+    ports:
+      - 17001:6379
+    networks:
+      redis_cluster_nework:
+        ipv4_address: 173.19.0.11
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf:rw
+      - redis-data2:/data
+    command:
+      /bin/sh -c "redis-server /usr/local/etc/redis/redis.conf "
+  redis_node3:
+    image: redis:alpine
+    container_name: redis_node3
+    restart: unless-stopped
+    ports:
+      - 17002:6379
+    networks:
+      redis_cluster_nework:
+        ipv4_address: 173.19.0.12
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf:rw
+      - redis-data3:/data
+    command:
+      /bin/sh -c "redis-server /usr/local/etc/redis/redis.conf "
+  redis_node4:
+    image: redis:alpine
+    container_name: redis_node4
+    restart: unless-stopped
+    ports:
+      - 17003:6379
+    networks:
+      redis_cluster_nework:
+        ipv4_address: 173.19.0.13
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf:rw
+      - redis-data4:/data
+    command:
+      /bin/sh -c "redis-server /usr/local/etc/redis/redis.conf "
+  redis_node5:
+    image: redis:alpine
+    container_name: redis_node5
+    restart: unless-stopped
+    ports:
+      - 17004:6379
+    networks:
+      redis_cluster_nework:
+        ipv4_address: 173.19.0.14
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf:rw
+      - redis-data5:/data
+    command:
+      /bin/sh -c "redis-server /usr/local/etc/redis/redis.conf "
+  redis_node6:
+    image: redis:alpine
+    container_name: redis_node6
+    restart: unless-stopped
+    ports:
+      - 17005:6379
+    networks:
+      redis_cluster_nework:
+        ipv4_address: 173.19.0.15
+    volumes:
+      - ./entrypoint.sh:/usr/local/bin/entrypoint.sh:Z
+      - ./redis.conf:/usr/local/etc/redis/redis.conf:rw
+      - redis-data6:/data
+    command:
+      - entrypoint.sh
+    depends_on:
+      - redis_node1
+      - redis_node2
+      - redis_node3
+      - redis_node4
+      - redis_node5
+
+networks:
+  redis_cluster_nework:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 173.19.0.0/16
+
+volumes:
+  redis-data1:
+  redis-data2:
+  redis-data3:
+  redis-data4:
+  redis-data5:
+  redis-data6:
